@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+	<MAB.Search>Search</MAB.Search>
+	<MAB.Select>Select</MAB.Select>
+	<MAB.SelectBuilding>Select building</MAB.SelectBuilding>
+	<MAB.NonBuildable> (Non buildable)</MAB.NonBuildable>
+	<MAB.SetWorkToBuild>Set work to build (in ticks): </MAB.SetWorkToBuild>
+	<MAB.SetCostList>Set cost list</MAB.SetCostList>
+	<MAB.Count>Count</MAB.Count>
+	<MAB.SetResearchRequirements>Set research requirements</MAB.SetResearchRequirements>
+	<MAB.SaveChanges>Save changes</MAB.SaveChanges>
+	<MAB.SetStuffCategories>Set stuff categories</MAB.SetStuffCategories>
+	<MAB.SetCostStuffCount>Set cost stuff count: </MAB.SetCostStuffCount>
+	<MAB.SelectDesignationCategory>Set designation category: </MAB.SelectDesignationCategory>
+</LanguageData>
