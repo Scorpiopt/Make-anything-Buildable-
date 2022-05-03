@@ -11,5 +11,5 @@
 	<MAB.SaveChanges>Save changes</MAB.SaveChanges>
 	<MAB.SetStuffCategories>Set stuff categories</MAB.SetStuffCategories>
 	<MAB.SetCostStuffCount>Set cost stuff count: </MAB.SetCostStuffCount>
-	<MAB.SelectDesignationCategory>Set designation category: </MAB.SelectDesignationCategory>
+	<MAB.SelectDesignationCategory>Set designation category (required): </MAB.SelectDesignationCategory>
 </LanguageData>

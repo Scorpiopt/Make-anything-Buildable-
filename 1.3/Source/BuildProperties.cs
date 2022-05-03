@@ -81,7 +81,6 @@ namespace MakeAnythingBuildable
                 {
                     def.designationCategory = designationCategoryDef;
                 }
-                Log.Message("Found designationCategoryDef: " + designationCategoryDef + " - " + this.designationCategory);
             }
             if (this.researchRequirements?.Any() ?? false)
             {

@@ -103,6 +103,7 @@ namespace MakeAnythingBuildable
                     buildPropsByDefs[curThingDef.defName] = curBuildProps;
                     ResetProps();
                     ResetPositions();
+                    Utils.ApplySettings();
                     Widgets.EndScrollView();
                     return;
                 }
@@ -127,7 +128,7 @@ namespace MakeAnythingBuildable
                             {
                                 curBuildProps.costList.Remove(key);
                                 curBuildProps.costList.Add(selected.defName, costCount);
-                            }, x => x.index));
+                            }, x => x.index, (ThingDef x) => x.LabelCap));
                         }
 
                         DoInput(skillRect.xMax + 5, firstColumnPos.y, "MAB.Count".Translate(), ref costCount, ref buf2);
@@ -153,7 +154,7 @@ namespace MakeAnythingBuildable
                     delegate (ThingDef selected)
                     {
                         curBuildProps.costList.Add(selected.defName, 1);
-                    }, x => x.index));
+                    }, x => x.index, (ThingDef x) => x.LabelCap));
                 });
                 firstColumnPos.y += 12;
 
@@ -224,20 +225,15 @@ namespace MakeAnythingBuildable
                     {
                         if (Widgets.ButtonText(skillRect, def.LabelCap))
                         {
-                            var floatList = new List<FloatMenuOption>();
-                            foreach (var researchProject in DefDatabase<ResearchProjectDef>.AllDefs
-                                .Where(x => !curBuildProps.researchRequirements.Any(y => x.defName == y)))
+                            Find.WindowStack.Add(new Window_SelectItem<ResearchProjectDef>(DefDatabase<ResearchProjectDef>.AllDefs
+                                .Where(x => !curBuildProps.researchRequirements.Any(y => x.defName == y)).ToList(),
+                            delegate (ResearchProjectDef selected)
                             {
-                                floatList.Add(new FloatMenuOption(researchProject.LabelCap, delegate
-                                {
-                                    var index = curBuildProps.researchRequirements.IndexOf(researchRequirement);
-                                    curBuildProps.researchRequirements.RemoveAt(index);
-                                    curBuildProps.researchRequirements.Insert(index, researchProject.defName);
-                                }));
-                            }
-                            Find.WindowStack.Add(new FloatMenu(floatList));
+                                var index = curBuildProps.researchRequirements.IndexOf(researchRequirement);
+                                curBuildProps.researchRequirements.RemoveAt(index);
+                                curBuildProps.researchRequirements.Insert(index, selected.defName);
+                            }, x => x.index, (ResearchProjectDef x) => x.LabelCap));
                         }
-
                         removeRect = new Rect(skillRect.xMax + 5, firstColumnPos.y, 20, 21f);
                         if (Widgets.ButtonImage(removeRect, TexButton.DeleteX))
                         {
@@ -254,26 +250,26 @@ namespace MakeAnythingBuildable
 
                 buttonRect = DoButton(ref firstColumnPos, "Add".Translate().CapitalizeFirst(), delegate
                 {
-                    var floatList = new List<FloatMenuOption>();
-                    foreach (var researchProject in DefDatabase<ResearchProjectDef>.AllDefs
-                        .Where(x => !curBuildProps.researchRequirements.Any(y => x.defName == y)))
-                    {
-                        floatList.Add(new FloatMenuOption(researchProject.LabelCap, delegate
-                        {
-                            curBuildProps.researchRequirements.Add(researchProject.defName);
-                        }));
-                    }
-                    Find.WindowStack.Add(new FloatMenu(floatList));
+                    Find.WindowStack.Add(new Window_SelectItem<ResearchProjectDef>(DefDatabase<ResearchProjectDef>.AllDefs
+                    .Where(x => !curBuildProps.researchRequirements.Any(y => x.defName == y)).ToList(),
+                            delegate (ResearchProjectDef selected)
+                            {
+                                curBuildProps.researchRequirements.Add(selected.defName);
+                            }, x => x.index, (ResearchProjectDef x) => x.LabelCap));
                 });
                 labelRect = DoLabel(ref firstColumnPos, "MAB.SelectDesignationCategory".Translate());
                 var designatorCategoryDef = DefDatabase<DesignationCategoryDef>.GetNamedSilentFail(curBuildProps.designationCategory ?? "");
                 buttonRect = DoButton(ref firstColumnPos, designatorCategoryDef != null ? designatorCategoryDef.LabelCap.ToString() : "-", delegate
                 {
-                    Find.WindowStack.Add(new Window_SelectItem<DesignationCategoryDef>(DefDatabase<DesignationCategoryDef>.AllDefsListForReading, 
-                        delegate (DesignationCategoryDef selected)
+                    var floatList = new List<FloatMenuOption>();
+                    foreach (var designationCategory in DefDatabase<DesignationCategoryDef>.AllDefsListForReading)
                     {
-                        curBuildProps.designationCategory = selected.defName;
-                    }, x => x.index));
+                        floatList.Add(new FloatMenuOption(designationCategory.LabelCap, delegate
+                        {
+                            curBuildProps.designationCategory = designationCategory.defName;
+                        }));
+                    }
+                    Find.WindowStack.Add(new FloatMenu(floatList));
                 });
 
             }
