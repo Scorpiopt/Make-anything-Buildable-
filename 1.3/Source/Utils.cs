@@ -2,6 +2,7 @@
 using RimWorld;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using UnityEngine;
 using Verse;
 
@@ -40,39 +41,12 @@ namespace MakeAnythingBuildable
         }
     }
 
-    [HarmonyPatch(typeof(PlayerKnowledgeDatabase), "ReloadAndRebind")]
-    public static class PlayerKnowledgeDatabasePatch
+    [HarmonyPatch(typeof(DefGenerator), "GenerateImpliedDefs_PreResolve")]
+    public static class DefGenerator_GenerateImpliedDefs_PreResolve_Patch
     {
         public static void Prefix()
         {
             Utils.ApplySettings();
-        }
-    }
-
-    [HarmonyPatch(typeof(StatsReportUtility), "Reset")]
-    public static class StatsReportUtility_Reset_Patch
-    {
-        public static bool Prefix()
-        {
-            if (Current.Game?.World?.factionManager is null)
-            {
-                Reset();
-                return false;
-            }
-            return true;
-        }
-
-        public static void Reset()
-        {
-            StatsReportUtility.scrollPosition = default(Vector2);
-            StatsReportUtility.scrollPositionRightPanel = default(Vector2);
-            StatsReportUtility.selectedEntry = null;
-            StatsReportUtility.scrollPositioner.Arm(armed: false);
-            StatsReportUtility.mousedOverEntry = null;
-            StatsReportUtility.cachedDrawEntries.Clear();
-            StatsReportUtility.quickSearchWidget.Reset();
-            PermitsCardUtility.selectedPermit = null;
-            PermitsCardUtility.selectedFaction = null;
         }
     }
 }
