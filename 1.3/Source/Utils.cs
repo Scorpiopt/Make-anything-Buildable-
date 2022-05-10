@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,11 +22,19 @@ namespace MakeAnythingBuildable
         }
         public static bool Spawnable(this ThingDef item)
         {
-            return (DebugThingPlaceHelper.IsDebugSpawnable(item) || item.Minifiable)
-                                && !typeof(Filth).IsAssignableFrom(item.thingClass)
-                                && !typeof(Mote).IsAssignableFrom(item.thingClass)
-                                && item.category != ThingCategory.Ethereal && item.plant is null
-                                && (item.building is null || item.Minifiable);
+            try
+            {
+                return (DebugThingPlaceHelper.IsDebugSpawnable(item) || item.Minifiable)
+                    && !typeof(Filth).IsAssignableFrom(item.thingClass)
+                    && !typeof(Mote).IsAssignableFrom(item.thingClass)
+                    && item.category != ThingCategory.Ethereal && item.plant is null
+                    && (item.building is null || item.Minifiable);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Caught error processing " + item + ": " + ex.ToString());
+                return false;
+            }
         }
 
         public static void ApplySettings()
